@@ -1,0 +1,104 @@
+import sys
+from pathlib import Path
+import tkinter as tk
+from tkinter import ttk
+
+class PetShellWorkspace(tk.Tk):
+    def __init__(self):
+        super().__init__()
+
+        self.title("CASTLE SYSTEM - PET Shell")
+        self.geometry("1280x720")
+        self.configure(bg="#0B0E14")
+
+        # 最小化やフルスクリーン切り替え用フラグ
+        self.is_side_panel_visible = True
+
+        self._setup_ui()
+        self._bind_shortcuts()
+
+    def _setup_ui(self):
+        # メインコンテナ（横分割）
+        self.main_container = tk.PanedWindow(
+            self, 
+            orient=tk.HORIZONTAL, 
+            bg="#1E232A", 
+            sashwidth=4, 
+            bd=0
+        )
+        self.main_container.pack(fill=tk.BOTH, expand=True)
+
+        # 1. ワークスペース（デスクトップ作業領域）
+        self.workspace_frame = tk.Frame(self.main_container, bg="#161B22")
+        self.main_container.add(self.workspace_frame, stretch="always", minsize=800)
+
+        ws_label = tk.Label(
+            self.workspace_frame,
+            text="[ MAIN WORKSPACE ]\nEmbedded Desktop / Terminal / Editor",
+            fg="#58A6FF",
+            bg="#161B22",
+            font=("Consolas", 14, "bold")
+        )
+        ws_label.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+
+        # 2. PETサイドパネル（カストル常駐・システム計器枠）
+        self.side_panel = tk.Frame(self.main_container, bg="#0D1117", width=320)
+        self.main_container.add(self.side_panel, stretch="never", minsize=260)
+
+        # カストル・アバタープレビュー領域（Live2D描画ターゲット）
+        self.avatar_canvas = tk.Canvas(
+            self.side_panel, 
+            bg="#05070A", 
+            highlightthickness=1, 
+            highlightbackground="#30363D"
+        )
+        self.avatar_canvas.pack(fill=tk.BOTH, expand=True, padx=10, pady=(10, 5))
+
+        avatar_text = self.avatar_canvas.create_text(
+            130, 200, 
+            text="[ Castor Live2D Target ]\nStanding by...", 
+            fill="#7EE787", 
+            font=("Consolas", 11)
+        )
+
+        # システム計器・ステータス表示枠
+        self.status_box = tk.LabelFrame(
+            self.side_panel, 
+            text="SYSTEM TELEMETRY", 
+            fg="#8B949E", 
+            bg="#0D1117", 
+            font=("Consolas", 9, "bold")
+        )
+        self.status_box.pack(fill=tk.X, padx=10, pady=(5, 10))
+
+        status_text = (
+            "OS: Linux / WSL\n"
+            "Node: CASTLE_ZERO\n"
+            "Mode: Work Companion\n"
+            "Shortcut: [F11] Toggle Panel"
+        )
+        self.status_label = tk.Label(
+            self.status_box, 
+            text=status_text, 
+            justify=tk.LEFT, 
+            fg="#C9D1D9", 
+            bg="#0D1117", 
+            font=("Consolas", 9)
+        )
+        self.status_label.pack(anchor="w", padx=8, pady=5)
+
+    def _bind_shortcuts(self):
+        # F11で作業領域を全画面化（サイドパネル格納）
+        self.bind("<F11>", self.toggle_side_panel)
+
+    def toggle_side_panel(self, event=None):
+        if self.is_side_panel_visible:
+            self.main_container.forget(self.side_panel)
+            self.is_side_panel_visible = False
+        else:
+            self.main_container.add(self.side_panel, stretch="never", minsize=260)
+            self.is_side_panel_visible = True
+
+if __name__ == "__main__":
+    app = PetShellWorkspace()
+    app.mainloop()
