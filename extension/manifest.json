@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "Web-Local Agent Bridge",
+  "version": "1.0.0",
+  "description": "Bridge interface connecting active web chat session and local worker agent.",
+  "permissions": [
+    "activeTab"
+  ],
+  "host_permissions": [
+    "https://gemini.google.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://gemini.google.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}
