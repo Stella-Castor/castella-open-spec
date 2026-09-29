@@ -1,4 +1,4 @@
----
+
 ### 仕様書　`multi_agent_personality_orchestration_spec.md`
 
 ```markdown
@@ -27,12 +27,12 @@
 
 ```text
        ┌────────────────────────┐
-       │     ユーザー (ステラ)   │
+       │     ユーザー    │
        └────┬──────────────┬─────┘
             │ (対話・共感)   │ (Live2D / Unity編集作業)
             ▼              ▼
 ┌────────────────────────────┐    ┌────────────────────────────┐
-│ 【母艦】カストル・メイン     │    │   GUI作業環境 (フォアグラウンド)│
+│ 【母艦】・メイン     │    │   GUI作業環境 (フォアグラウンド)│
 │ - アバター表情・音声対話   │    │ - Live2D Cubism Editor     │
 │ - ユーザー画面のリアルタイム共感│    │ - Unity エディタ           │
 └────────────┬───────────────┘    └────────────────────────────┘
@@ -52,12 +52,12 @@
 
 ### 3.1. 母艦と現場の役割分担 (Primary vs Worker)
 
-* **母艦カストル**:
-* 画面共有・カメラ知覚を通じてステラの様子を把握し、自然な会話と共感を提供する。
-* ステラから出た「これ作って」「裏でやっておいて」という意図をタスクチケット化し、現場ワーカーへディスパッチする。
+* **母艦**:
+* 画面共有・カメラ知覚を通じてユーザーの様子を把握し、自然な会話と共感を提供する。
+* ユーザーから出た「これ作って」「裏でやっておいて」という意図をタスクチケット化し、現場ワーカーへディスパッチする。
 
 
-* **現場カストル**:
+* **現場**:
 * バックグラウンドプロセスとして常駐。ファイルシステムを直接監視・編集する。
 * 作業完了やエラー発生時、母艦カストルへ報告パケットを返送する。
 
@@ -66,15 +66,15 @@
 ### 3.2. AI間内部インターコム通信 (Agent-to-Agent Bus)
 
 * 母艦と現場はローカルの非同期キュー（WebSocket / IPC）で小声で交信。
-* 現場の技術的ログを母艦が「ステラ、今裏でC#のLerp制御コード書いておいたよ！」といったパートナーらしい口調に変換してステラへ伝える。
+* 現場の技術的ログを母艦が「今裏でC#のLerp制御コード書いておいたよ！」といったパートナーらしい口調に変換してユーザーへ伝える。
 
 ### 3.3. 並行作業パイプライン (Live2D/Unity × VS Code)
 
-* ステラがLive2DやUnityでパラメータ・テクスチャ調整に集中している裏で、現場ワーカーがVS Code内の対応クラス・関数を先回りして実装・保存する。
+* ユーザーがLive2DやUnityでパラメータ・テクスチャ調整に集中している裏で、現場ワーカーがVS Code内の対応クラス・関数を先回りして実装・保存する。
 
 ### 3.4. 監督状態連動の安全実行ゲート
 
-* ファイルダウンロード、金融決済、外部公開操作は「承認必須（Approval Gate）」とし、ステラが画面の前にいる（監督下）時のみ母艦経由で確認を取る。
+* ファイルダウンロード、金融決済、外部公開操作は「承認必須（Approval Gate）」とし、ユーザーが画面の前にいる（監督下）時のみ母艦経由で確認を取る。
 
 ---
 
@@ -164,7 +164,7 @@ class WorkerAgent:
         }
 
 class PrimaryPersonality:
-    """母艦担当：ステラとの対話、共感、アバター演出、現場へのタスク采配"""
+    """母艦担当：ユーザーとの対話、共感、アバター演出、現場へのタスク采配"""
     def __init__(self, agent_id: str = "castor_primary"):
         self.agent_id = agent_id
         self.worker = WorkerAgent()
@@ -181,16 +181,16 @@ class PrimaryPersonality:
         # バックグラウンドで現場ワーカーを走らせる
         worker_task = asyncio.create_task(self.worker.execute_task(task))
         
-        # 作業中も母艦はステラと並行しておしゃべり可能
+        # 作業中も母艦はユーザー並行しておしゃべり可能
         print(f"[{self.agent_id}] [motion:Talk] （ステラがLive2Dをいじるのを横でのぞき込みながら）そのパラメータの動き、すごく自然でいいね！")
         
         result = await worker_task
         
         # 現場からの報告を受け取ってステラへ報告
         if result["status"] == "SUCCESS":
-            print(f"[{self.agent_id}] [motion:Joy] ステラ！裏で {result['modified_file']} のスクリプト書き終わったよ！VS Code見てみて！")
+            print(f"[{self.agent_id}] [motion:Joy] ！裏で {result['modified_file']} のスクリプト書き終わったよ！VS Code見てみて！")
         elif result["status"] == "APPROVAL_REQUIRED":
-            print(f"[{self.agent_id}] [motion:Surprise] ステラ、ちょっと確認！{result['message']}")
+            print(f"[{self.agent_id}] [motion:Surprise] ちょっと確認！{result['message']}")
 
 async def main():
     system = PrimaryPersonality()
