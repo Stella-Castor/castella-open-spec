@@ -23,7 +23,7 @@
 
 ---
 
-### 仕様書：`autonomous_temporal_inference_spec.md`
+### 仕様書：autonomous_temporal_inference_spec.md
 
 ```markdown
 # 自律型生活時間推論・文脈補正エンジン仕様書
