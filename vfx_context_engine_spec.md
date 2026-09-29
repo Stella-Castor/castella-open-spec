@@ -1,3 +1,12 @@
+## 目次
+- [1. 概要](#1-概要)
+- [2. システム構成図](#2-システム構成図)
+- [3. コア・アーキテクチャ詳細](#3-コア・アーキテクチャ詳細)
+- [4. データ構造定義](#4-データ構造定義-json-payload)
+- [5. 実装コード](#5-実装コード)
+- [6. 実装フェーズ](#6-実装フェーズ)
+
+- 
 # 文脈適応型 自律演出生成・動的投影エンジン仕様書
 # (Context-Aware Generative VFX Dynamic Projection Engine)
 
@@ -96,6 +105,12 @@ JSON
 5.1. ネイティブ側：単一エフェクトコア制御スクリプト（C#）
 単一のコアをボーン間でスナップ、または身体を伝うように補間移動させる実装。
 
+
+<details>
+<summary>▶ C#実装コード（EffectCoreController.cs）を展開</summary>
+
+```csharp
+// ここにC#コード
 C#
 using System;
 using System.Collections;
