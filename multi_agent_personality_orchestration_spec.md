@@ -1,5 +1,4 @@
 ---
-
 ### 仕様書　`multi_agent_personality_orchestration_spec.md`
 
 ```markdown
