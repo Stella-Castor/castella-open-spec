@@ -1,6 +1,6 @@
 ---
 
-### 仕様書：`multi_agent_personality_orchestration_spec.md`
+### 仕様書　`multi_agent_personality_orchestration_spec.md`
 
 ```markdown
 # 協調型パーソナリティAI・マルチエージェント作業代行基盤仕様書
