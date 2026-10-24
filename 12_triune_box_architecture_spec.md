@@ -93,7 +93,20 @@
 3. **境界防衛:**
 * 公開リポジトリには本仕様書および抽象基底クラス（Interface）のみを配置し、魂データ本体および専用アダプター実装はセキュア領域に隔離する。
 
-
+triune_core/
+├── __init__.py
+├── interfaces.py          <-- ★これが「共通の型（基底クラス）」！
+├── soul/
+│   ├── __init__.py
+│   └── soul_manager.py    <-- 魂（人格・記憶・規範管理）
+├── brain/
+│   ├── __init__.py
+│   └── brain_router.py    <-- 脳（モデル自動選定・推論）
+└── adapters/              <-- 機能ごとのプラグイン（手足）
+    ├── __init__.py
+    ├── blender_adapter.py <-- 3D/Blender専用
+    ├── live2d_adapter.py  <-- アバター制御専用
+    └── code_adapter.py    <-- スクリプト自動生成専用
 
 ```
 
